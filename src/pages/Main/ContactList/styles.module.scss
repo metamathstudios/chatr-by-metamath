@@ -1,0 +1,11 @@
+.result {
+  width: 350px;
+  height: 350px;
+  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.result::-webkit-scrollbar {
+  display: none;
+}
