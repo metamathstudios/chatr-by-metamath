@@ -75,7 +75,7 @@ const Settings: React.FC<PageType> = (props: PageType) => {
         </div>
       </header>
       <div className={styles.content}>
-        <div className={styles.options}>
+{/*         <div className={styles.options}>
           <div className={styles.default}>
             <img src="/images/default.svg" alt="Icon" />
             <span>Default</span>
@@ -84,7 +84,7 @@ const Settings: React.FC<PageType> = (props: PageType) => {
             <img src="/images/cluster.svg" alt="Icon" />
             <span>Cluster</span>
           </div>
-        </div>
+        </div> */}
         <div className={styles.inputs}>
           <div className={styles.item}>
             <label>HTTP Endpoint:</label>
@@ -98,6 +98,11 @@ const Settings: React.FC<PageType> = (props: PageType) => {
             <label>Security Token</label>
             <input type="password" id="securityToken" />
           </div>
+          <div className={styles.item}>
+            {/* When this button is clicked, save the contentents of HTTP Endpoint, WS Endpoint and Security Token to local storage */}
+            <div className={styles.button} onClick={saveSettings}>Save</div>
+          </div>
+          
         </div>
       </div>
       <div className={styles.footer}>

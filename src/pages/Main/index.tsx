@@ -148,12 +148,12 @@ const Main: React.FC<MainType> = (props: MainType) => {
           <div className={styles.bar} id="search">
             <input
               type="text"
-              placeholder="Search a user wallet..."
+              placeholder="Add a new contact"
               id="walletInput"
             />
             <div className={styles.icon}>
               <img
-                src="/images/search.svg"
+                src="/images/send.svg"
                 alt="Icon"
                 onClick={() =>
                   search(
