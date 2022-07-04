@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { isValidPeerId } from "../../utils";
 import ContactList from "./ContactList";
 import Message from "./Message";
 import styles from "./style.module.scss";
 
 interface MainType {
+  changeChatWith: (value: string | ((prevVar: string) => string)) => void;
   changePageHandle: (value: string | ((prevVar: string) => string)) => void;
 }
 
@@ -13,23 +15,18 @@ const Main: React.FC<MainType> = (props: MainType) => {
   
   0 - Loading
   1 - Not configured yet
-  2 - Favorites list
-  3 - Get Started
-  4 - Searching
-  5 - Searched contacts list
-  6 - Search found nothing
+  2 - Get Started
+  3 - Contacts list
   */
 
   const [stage, setStage] = useState(0);
   const [data, setData] = useState([""]);
-  const [favData, setFavData] = useState([""]);
   const [notifications, setNotifications] = useState([""]);
 
   useEffect(() => {
     if (localStorage) {
       const data = localStorage.getItem("data");
-      const favoritesData = localStorage.getItem("favorited")?.split(",");
-
+      const contacts = localStorage.getItem("contacts");
       if (data) {
         const parsed = JSON.parse(data);
         if (
@@ -37,11 +34,15 @@ const Main: React.FC<MainType> = (props: MainType) => {
           parsed.WSEndpoint !== "" &&
           parsed.SecurityToken !== ""
         ) {
-          if (favoritesData) {
-            setStage(2);
-            setFavData(favoritesData);
+          if (contacts) {
+            if (contacts.includes("null")) {
+              setStage(2);
+            } else {
+              setData(contacts.split(","));
+              setStage(3);
+            }
           } else {
-            setStage(3);
+            localStorage.setItem("contacts", "null");
           }
         } else {
           setStage(1);
@@ -54,13 +55,10 @@ const Main: React.FC<MainType> = (props: MainType) => {
     }
   }, []);
 
-  const delay = (amount = 750) =>
-    new Promise((resolve) =>
-      setTimeout(resolve, amount)
-    ); /* @Phillipe método utilizado para testes (descartável) */
+  const add = async (wallet: string) => {
+    var contacts = [""];
 
-  const search = async (wallet: string) => {
-    if (wallet.length < 8) {
+    if (!isValidPeerId(wallet)) {
       const searchElement = document.getElementById("search");
       const walletInput = document.getElementById(
         "walletInput"
@@ -68,30 +66,39 @@ const Main: React.FC<MainType> = (props: MainType) => {
 
       if (searchElement && walletInput) {
         var lastValue = walletInput.value;
-        walletInput.value = "Wallet too short!";
-        walletInput.placeholder = "Wallet too short!";
+        walletInput.value = "Invalid address!";
+        walletInput.placeholder = "Invalid address!";
         walletInput.disabled = true;
         searchElement.style.outline = "1.5px solid red";
 
         setTimeout(() => {
           searchElement.style.outline = "1.5px solid transparent";
           walletInput.value = lastValue;
-          walletInput.placeholder = "Search a user wallet...";
+          walletInput.placeholder = "Add a new contact";
           walletInput.disabled = false;
           lastValue = "";
         }, 1500);
       }
     } else {
-      setStage(0);
-      await delay(); /* @Phillipe método utilizado para testes (descartável) */
-
-      /* @Phillipe colocar método de busca de wallet aqui */
-
-      /* @Phillipe dados fictícios apenas para testes */
-      const fictionalData = ["0x71C7656EC7ab88b098defB751B7401B5f6d8976F"];
-
-      setData(fictionalData);
-      setStage(5);
+      if (localStorage) {
+        contacts = localStorage.getItem("contacts")!.split(",");
+        if (contacts.includes(wallet)) {
+          setData(contacts);
+          setStage(3);
+        } else {
+          if (contacts.includes("null")) {
+            contacts.shift();
+            contacts.push(wallet);
+            console.log(contacts);
+            localStorage.setItem("contacts", contacts.toString());
+            window.location.reload();
+          } else {
+            contacts.push(wallet);
+            localStorage.setItem("contacts", contacts.toString());
+            window.location.reload();
+          }
+        }
+      }
     }
   };
 
@@ -153,10 +160,10 @@ const Main: React.FC<MainType> = (props: MainType) => {
             />
             <div className={styles.icon}>
               <img
-                src="/images/send.svg"
+                src="/images/plus.svg"
                 alt="Icon"
                 onClick={() =>
-                  search(
+                  add(
                     (document.getElementById("walletInput") as HTMLInputElement)
                       .value
                   )
@@ -182,20 +189,18 @@ const Main: React.FC<MainType> = (props: MainType) => {
             action={props.changePageHandle}
           />
         )}
-        {stage === 2 && <ContactList data={favData} />}
-        {stage === 3 && (
+        {stage === 2 && (
           <Message
             icon="search"
             text="Don't know how to chat and send your token? search wallet ID to get
         started"
           />
         )}
-        {stage === 4 && <Message icon="search" text="Searching..." />}
-        {stage === 5 && <ContactList data={data} />}
-        {stage === 6 && (
-          <Message
-            icon="notSearching"
-            text="We didn't find any user with that ID, check and try again"
+        {stage === 3 && (
+          <ContactList
+            data={data}
+            changeChatWith={props.changeChatWith}
+            changePageHandle={props.changePageHandle}
           />
         )}
       </div>

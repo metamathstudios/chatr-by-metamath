@@ -1,7 +1,7 @@
 .container {
   .header {
     width: 350px;
-    height: 120px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,65 +14,20 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 15px;
 
       .left {
         margin-left: 20px;
         font-weight: 600 !important;
-      }
-
-      .right {
-        margin-right: 20px;
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
 
         img {
-          padding: 0 7px 0;
           cursor: pointer;
         }
-      }
-    }
 
-    .search {
-      width: 350px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: row;
-      transition: all 0.2s ease-in-out;
-
-      .bar {
-        background-color: var(--grey);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 20px;
-        transition: all 0.2s ease-in-out;
-
-        input {
-          width: 260px;
-          height: 40px;
-          border-radius: 20px;
-          border: 0;
-          outline: 0;
-          background-color: var(--grey);
-          color: var(--white);
-          padding: 20px;
-        }
-
-        .icon {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding-right: 15px;
-          cursor: pointer;
-
-          img {
-            width: 20px;
-            height: 20px;
-          }
+        span {
+          margin-left: 20px;
         }
       }
     }
@@ -80,13 +35,68 @@
 
   .content {
     width: 350px;
-    height: 350px;
+    height: 410px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     font-family: "Poppins", sans-serif;
     background-color: var(--grey);
+    flex-direction: column;
+
+    img {
+      width: 50px;
+    }
+
+    .title {
+      margin-top: 20px;
+      font-size: 17px;
+    }
+
+    .warning {
+      margin-top: 5px;
+      font-size: 13px;
+      color: var(--sl-grey);
+    }
+
+    .copyArea {
+      width: 350px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row;
+      margin-top: 20px;
+
+      .address {
+        width: 260px;
+        height: 40px;
+        background-color: var(--l-grey);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        padding-left: 25px;
+        color: var(--sl-grey);
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+      }
+
+      .button {
+        width: 50px;
+        height: 40px;
+        background-color: var(--l-grey);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+
+        img {
+          width: 20px;
+          cursor: pointer;
+        }
+      }
+    }
   }
 
   .footer {
