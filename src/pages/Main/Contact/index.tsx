@@ -5,6 +5,7 @@ import styles from "./styles.module.scss";
 interface PageType {
   changePageHandle: (value: string | ((prevVar: string) => string)) => void;
   changeChatWith: (value: string | ((prevVar: string) => string)) => void;
+  removeContact: (value: string | ((prevVar: string) => string)) => void;
   wallet: string;
   customName?: string;
 }
@@ -24,11 +25,18 @@ const Contact: React.FC<PageType> = (props: PageType) => {
           style={props.customName ? { fontSize: "11px" } : { fontSize: "13px" }}
         >
           {props.customName
-            ? formatWallet(props.wallet, 18)
-            : formatWallet(props.wallet, 24)}
+            ? formatWallet(props.wallet, 30)
+            : formatWallet(props.wallet, 34)}
         </span>
       </div>
       <div className={styles.favorite}>
+        <img
+          src="/images/trash.svg"
+          alt="Icon"
+          onClick={() => {
+            props.removeContact(props.wallet);
+          }}
+        />
         <img
           src="/images/send.svg"
           alt="Icon"

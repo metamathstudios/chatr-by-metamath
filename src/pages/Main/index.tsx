@@ -55,7 +55,7 @@ const Main: React.FC<MainType> = (props: MainType) => {
     }
   }, []);
 
-  const add = async (wallet: string) => {
+  const addContact = async (wallet: string) => {
     var contacts = [""];
 
     if (!isValidPeerId(wallet)) {
@@ -89,7 +89,6 @@ const Main: React.FC<MainType> = (props: MainType) => {
           if (contacts.includes("null")) {
             contacts.shift();
             contacts.push(wallet);
-            console.log(contacts);
             localStorage.setItem("contacts", contacts.toString());
             window.location.reload();
           } else {
@@ -97,6 +96,24 @@ const Main: React.FC<MainType> = (props: MainType) => {
             localStorage.setItem("contacts", contacts.toString());
             window.location.reload();
           }
+        }
+      }
+    }
+  };
+
+  const removeContact = async (wallet: any) => {
+    var contacts = [""];
+
+    if (localStorage) {
+      contacts = localStorage.getItem("contacts")!.split(",");
+      if (contacts.includes(wallet)) {
+        const index = contacts.indexOf(wallet);
+        if (index > -1) {
+          contacts.splice(index, 1);
+          localStorage.setItem("contacts", contacts.toString());
+          setData(contacts);
+          setStage(3);
+          window.location.reload();
         }
       }
     }
@@ -163,7 +180,7 @@ const Main: React.FC<MainType> = (props: MainType) => {
                 src="/images/plus.svg"
                 alt="Icon"
                 onClick={() =>
-                  add(
+                  addContact(
                     (document.getElementById("walletInput") as HTMLInputElement)
                       .value
                   )
@@ -201,6 +218,7 @@ const Main: React.FC<MainType> = (props: MainType) => {
             data={data}
             changeChatWith={props.changeChatWith}
             changePageHandle={props.changePageHandle}
+            removeContact={removeContact}
           />
         )}
       </div>
