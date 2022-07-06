@@ -43,7 +43,7 @@ const Send: React.FC<PageType> = (props: PageType) => {
         <div className={styles.copyArea}>
           <input type="text" />
           <div className={styles.button}>
-            <img src="/images/send  .svg" alt="Icon" />
+            <img src="/images/send.svg" alt="Icon" />
           </div>
         </div>
       </div>
