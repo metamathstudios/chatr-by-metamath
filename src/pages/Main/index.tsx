@@ -123,7 +123,7 @@ const Main: React.FC<MainType> = (props: MainType) => {
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.menu}>
-          <div className={styles.left}>ChatR</div>
+          <div className={styles.left}>Chatr</div>
           <div className={styles.right}>
             {notifications.includes("gift") ? (
               <img

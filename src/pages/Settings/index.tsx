@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styles from "./style.module.scss";
 
-import AES from "crypto-js/aes";
+// import AES from "crypto-js/aes";
 
 interface PageType {
   changePageHandle: (value: string | ((prevVar: string) => string)) => void;
@@ -20,6 +20,12 @@ const Settings: React.FC<PageType> = (props: PageType) => {
     ).value;
 
     const data = {
+      HTTPEndpoint: httpEndpointValue,
+      WSEndpoint: wsEndpointValue,
+      SecurityToken: securityTokenValue,
+    };
+
+    /* const data = {
       HTTPEndpoint: AES.encrypt(
         httpEndpointValue,
         process.env.REACT_APP_SECRET_KEY!
@@ -32,7 +38,7 @@ const Settings: React.FC<PageType> = (props: PageType) => {
         securityTokenValue,
         process.env.REACT_APP_SECRET_KEY!
       ).toString(),
-    };
+    }; */
 
     if (localStorage) {
       localStorage.setItem("data", JSON.stringify(data));
@@ -102,7 +108,7 @@ const Settings: React.FC<PageType> = (props: PageType) => {
             {/* When this button is clicked, save the contentents of HTTP Endpoint, WS Endpoint and Security Token to local storage */}
             <div className={styles.button} onClick={saveSettings}>Save</div>
           </div>
-          
+            <label></label>
         </div>
       </div>
       <div className={styles.footer}>

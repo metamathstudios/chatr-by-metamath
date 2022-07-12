@@ -35,6 +35,7 @@ const Send: React.FC<PageType> = (props: PageType) => {
           className={styles.wallet}
           style={props.customName ? { marginTop: "0" } : { marginTop: "20px" }}
         >
+          Sending From:
           KSAUBDAUDIBASDIUBASDIUBSADIUBSA
         </span>
 
@@ -43,7 +44,7 @@ const Send: React.FC<PageType> = (props: PageType) => {
         <div className={styles.copyArea}>
           <input type="text" />
           <div className={styles.button}>
-            <img src="/images/send  .svg" alt="Icon" />
+            <img src="/images/send.svg" alt="Icon" />
           </div>
         </div>
       </div>
