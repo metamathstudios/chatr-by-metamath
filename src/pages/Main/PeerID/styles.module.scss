@@ -19,8 +19,10 @@
 
     .id {
       width: 200px;
-      display: flex;
       align-items: flex-start;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       justify-content: space-between;
       flex-direction: row;
       border: solid 1px var(--sl-grey);
@@ -28,7 +30,9 @@
       padding-left: 12px;
       padding-right: 12px;
       border-radius: 20px;
+    }
 
+    .pointer {
       img {
         cursor: pointer;
       }
