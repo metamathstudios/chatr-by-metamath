@@ -1,4 +1,4 @@
-import type { Settings } from "./state";
+import type { Settings } from "../state";
 import { arrayify } from '@ethersproject/bytes'
 import PeerId from "peer-id";
 

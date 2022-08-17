@@ -19,7 +19,7 @@ const PeerID: React.FC = () => {
           <span>{myPeerId}</span>
         </div>
         <div className={styles.pointer}>
-          <img src="/images/copyDark.svg" alt="Icon" />
+          <img onClick={() => {navigator.clipboard.writeText(myPeerId)}} src="/images/copyDark.svg" alt="Icon" />
         </div>
         
       </div>

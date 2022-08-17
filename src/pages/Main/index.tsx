@@ -125,7 +125,7 @@ const Main: React.FC<MainType> = (props: MainType) => {
         <div className={styles.menu}>
           <div className={styles.left}>Chatr</div>
           <div className={styles.right}>
-            {notifications.includes("gift") ? (
+            {/* {notifications.includes("gift") ? (
               <img
                 src="/images/giftNotification.svg"
                 alt="Icon"
@@ -139,7 +139,7 @@ const Main: React.FC<MainType> = (props: MainType) => {
                   props.changePageHandle("gift");
                 }}
               />
-            )}
+            )} */}
             {notifications.includes("wallet") ? (
               <img
                 src="/images/walletNotification.svg"

@@ -1,7 +1,7 @@
 import React from "react";
 import { formatWallet } from "../../utils";
 import Received from "./Received";
-import Sended from "./Sended";
+import Sent from "./Sent";
 import styles from "./style.module.scss";
 import Transaction from "./Transaction";
 
@@ -56,7 +56,7 @@ const Chat: React.FC<PageType> = (props: PageType) => {
       <div className={styles.content}>
         <div className={styles.wrapper}>
           <Received text={"you owe me baitola"} />
-          <Sended text={"I will pay you rn"} />
+          <Sent text={"I will pay you rn"} />
           <Transaction quantity={10} />
           <Received text={"thanks bro"} />
         </div>

@@ -5,7 +5,7 @@ interface ComponentType {
   text: string;
 }
 
-const Sended: React.FC<ComponentType> = (props: ComponentType) => {
+const Sent: React.FC<ComponentType> = (props: ComponentType) => {
   return (
     <div className={styles.container}>
       <div className={styles.message}>
@@ -17,4 +17,4 @@ const Sended: React.FC<ComponentType> = (props: ComponentType) => {
   );
 };
 
-export default Sended;
+export default Sent;
