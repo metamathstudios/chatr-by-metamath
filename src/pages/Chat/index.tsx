@@ -13,6 +13,7 @@ interface PageType {
 }
 
 const Chat: React.FC<PageType> = (props: PageType) => {
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
