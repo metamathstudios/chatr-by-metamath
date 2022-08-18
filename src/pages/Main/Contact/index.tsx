@@ -25,8 +25,8 @@ const Contact: React.FC<PageType> = (props: PageType) => {
           style={props.customName ? { fontSize: "11px" } : { fontSize: "13px" }}
         >
           {props.customName
-            ? formatWallet(props.wallet, 30)
-            : formatWallet(props.wallet, 34)}
+            ? formatWallet(props.wallet, 20)
+            : formatWallet(props.wallet, 18)}
         </span>
       </div>
       <div className={styles.favorite}>

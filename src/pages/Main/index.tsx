@@ -27,6 +27,8 @@ const Main: React.FC<MainType> = (props: MainType) => {
     if (localStorage) {
       const data = localStorage.getItem("data");
       const contacts = localStorage.getItem("contacts");
+      const aliases = localStorage.getItem("aliases");
+
       if (data) {
         const parsed = JSON.parse(data);
         if (
@@ -44,6 +46,10 @@ const Main: React.FC<MainType> = (props: MainType) => {
           } else {
             localStorage.setItem("contacts", "null");
           }
+
+          if (!aliases) {
+            localStorage.setItem("aliases", "[]");
+          }
         } else {
           setStage(1);
           setNotifications(["settings"]);
@@ -57,13 +63,12 @@ const Main: React.FC<MainType> = (props: MainType) => {
 
   const addContact = async (wallet: string) => {
     var contacts = [""];
+    const searchElement = document.getElementById("search");
+    const walletInput = document.getElementById(
+      "walletInput"
+    ) as HTMLInputElement;
 
     if (!isValidPeerId(wallet)) {
-      const searchElement = document.getElementById("search");
-      const walletInput = document.getElementById(
-        "walletInput"
-      ) as HTMLInputElement;
-
       if (searchElement && walletInput) {
         var lastValue = walletInput.value;
         walletInput.value = "Invalid address!";
@@ -80,11 +85,25 @@ const Main: React.FC<MainType> = (props: MainType) => {
         }, 1500);
       }
     } else {
-      if (localStorage) {
+      if (localStorage && searchElement) {
         contacts = localStorage.getItem("contacts")!.split(",");
         if (contacts.includes(wallet)) {
           setData(contacts);
           setStage(3);
+
+          var lastValue = walletInput.value;
+          walletInput.value = "Address already added!";
+          walletInput.placeholder = "Address already added!";
+          walletInput.disabled = true;
+          searchElement.style.outline = "1.5px solid red";
+
+          setTimeout(() => {
+            searchElement.style.outline = "1.5px solid transparent";
+            walletInput.value = lastValue;
+            walletInput.placeholder = "Add a new contact";
+            walletInput.disabled = false;
+            lastValue = "";
+          }, 1500);
         } else {
           if (contacts.includes("null")) {
             contacts.shift();

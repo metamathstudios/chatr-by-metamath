@@ -1,6 +1,11 @@
-import type { Settings } from "../state";
-import { arrayify } from '@ethersproject/bytes'
+import { arrayify } from "@ethersproject/bytes";
 import PeerId from "peer-id";
+import type { Settings } from "../state";
+
+export interface Aliases {
+  wallet: string;
+  aliases: string;
+}
 
 /**
  * True if instance is running on server
@@ -35,7 +40,11 @@ export const isValidPeerId = (v: string): boolean => {
  * @param signature string (optional) - Signature of message from recipient
  * @returns encoded message
  */
-export const encodeMessage = (from: string, message: string, signature?: string): string => {
+export const encodeMessage = (
+  from: string,
+  message: string,
+  signature?: string
+): string => {
   return `myne:${encodeSignedRecipient(from, signature)}:${message}`;
 };
 
@@ -44,9 +53,12 @@ export const encodeMessage = (from: string, message: string, signature?: string)
  * @param message string
  * @returns string
  */
-export const encodeSignMessageRequest = (message: string, recipient: string) => {
+export const encodeSignMessageRequest = (
+  message: string,
+  recipient: string
+) => {
   return `myne:sign:${recipient}:${message}`;
-}
+};
 
 /**
  * Encodes recipient with signature for later parsing
@@ -54,33 +66,46 @@ export const encodeSignMessageRequest = (message: string, recipient: string) => 
  * @param signature strig
  * @returns encodedSignedRecipient string
  */
-export const encodeSignedRecipient = (from: string, signature?: string): string => {
-  return `${from}${signature ? `-${signature}` : ''}`
-}
-
-
-export type SignedRecipient = {
+export const encodeSignedRecipient = (
   from: string,
   signature?: string
-}
+): string => {
+  return `${from}${signature ? `-${signature}` : ""}`;
+};
+
+export type SignedRecipient = {
+  from: string;
+  signature?: string;
+};
 
 /**
  * Decodes recipient to obtain signature if any
  * @param maybeSignedRecipient string
  * @returns SignedRecipient
  */
- export const decodeSignedRecipient = (maybeSignedRecipient: string): SignedRecipient => {
-  const [from, signature] = maybeSignedRecipient.includes('-') ? maybeSignedRecipient.split('-') : [maybeSignedRecipient]
-  return { from, signature }
-}
+export const decodeSignedRecipient = (
+  maybeSignedRecipient: string
+): SignedRecipient => {
+  const [from, signature] = maybeSignedRecipient.includes("-")
+    ? maybeSignedRecipient.split("-")
+    : [maybeSignedRecipient];
+  return { from, signature };
+};
 
 /**
  * Copied from @hoprnet/hopr-utils until web support is provided
  * https://github.com/hoprnet/hoprnet/blob/059250384a04463fa1d1068dde38697ce683c817/packages/utils/src/libp2p/verifySignatureFromPeerId.ts#L15-L18
  */
- export async function verifySignatureFromPeerId(peerId: string, message: string, signature: string): Promise<boolean> {
-  const pId = PeerId.createFromB58String(peerId)
-  return await pId.pubKey.verify(new TextEncoder().encode(message), arrayify(signature))
+export async function verifySignatureFromPeerId(
+  peerId: string,
+  message: string,
+  signature: string
+): Promise<boolean> {
+  const pId = PeerId.createFromB58String(peerId);
+  return await pId.pubKey.verify(
+    new TextEncoder().encode(message),
+    arrayify(signature)
+  );
 }
 
 /**
@@ -90,9 +115,17 @@ export type SignedRecipient = {
  * @param signer string
  * @returns boolean
  */
-export const verifyAuthenticatedMessage = async (originalMessage: string, signedMessage: string, signer: string) => {
-  return await verifySignatureFromPeerId(signer, originalMessage, signedMessage);
-}
+export const verifyAuthenticatedMessage = async (
+  originalMessage: string,
+  signedMessage: string,
+  signer: string
+) => {
+  return await verifySignatureFromPeerId(
+    signer,
+    originalMessage,
+    signedMessage
+  );
+};
 
 /**
  * Decodes incoming message.
@@ -101,11 +134,16 @@ export const verifyAuthenticatedMessage = async (originalMessage: string, signed
  */
 export const decodeMessage = (
   fullMessage: string
-): { tag: string; from: string; message: string, signature: string | undefined } => {
+): {
+  tag: string;
+  from: string;
+  message: string;
+  signature: string | undefined;
+} => {
   const [tag, maybeSignedRecipient, ...messages] = fullMessage.split(":");
   const message = messages.join(":");
 
-  const {from, signature} = decodeSignedRecipient(maybeSignedRecipient);
+  const { from, signature } = decodeSignedRecipient(maybeSignedRecipient);
 
   if (!from || !isValidPeerId(from)) {
     throw Error(
@@ -117,7 +155,7 @@ export const decodeMessage = (
     tag,
     from,
     message,
-    signature
+    signature,
   };
 };
 
@@ -135,27 +173,49 @@ export const decodeMessage = (
 }; */
 
 export const getUrlParams = (): Partial<Settings> => {
-  
-    const data = localStorage.getItem("data");
+  const data = localStorage.getItem("data");
 
-    if (data) {
-      const parsed = JSON.parse(data);
+  if (data) {
+    const parsed = JSON.parse(data);
 
-      return {
-        httpEndpoint: parsed.HTTPEndpoint,
-        wsEndpoint: parsed.WSEndpoint,
-        securityToken: parsed.SecurityToken,
-      };
-    } else {
-      return {
-        httpEndpoint: undefined,
-        wsEndpoint: undefined,
-        securityToken: undefined,
-      };
-    }
-  
+    return {
+      httpEndpoint: parsed.HTTPEndpoint,
+      wsEndpoint: parsed.WSEndpoint,
+      securityToken: parsed.SecurityToken,
+    };
+  } else {
+    return {
+      httpEndpoint: undefined,
+      wsEndpoint: undefined,
+      securityToken: undefined,
+    };
+  }
 };
 
 export const formatWallet = (wallet: string, cuttedChars: number) => {
-  return wallet.slice(0, wallet.length - cuttedChars) + "...";
+  return wallet.slice(0, cuttedChars) + "...";
+};
+
+export const isValidEthAddress = (v: string): boolean => {
+  return /^0x[a-fA-F0-9]{40}$/.test(v);
+};
+
+export const addAliases = (wallet: string, newAliases: string) => {
+  if (localStorage) {
+    var aliases = JSON.parse(
+      localStorage.getItem("aliases")!
+    ) as Array<Aliases>;
+
+    if (aliases.length < 1) {
+      aliases.push({ wallet: wallet, aliases: newAliases });
+      localStorage.setItem("aliases", JSON.stringify(aliases));
+    } else if (aliases.length >= 1) {
+      for (var i = 0; i < aliases.length; i++) {
+        if (aliases[i].wallet && aliases[i].wallet === wallet) {
+          aliases[i].aliases = newAliases;
+          localStorage.setItem("aliases", JSON.stringify(aliases));
+        }
+      }
+    }
+  }
 };
