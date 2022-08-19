@@ -95,7 +95,7 @@
         justify-content: center;
         font-size: 12px;
         padding-left: 25px;
-        color: var(--white);
+        color: white;
         border-top-left-radius: 25px;
         border-bottom-left-radius: 25px;
         border: 0;
@@ -116,6 +116,51 @@
           width: 20px;
           cursor: pointer;
         }
+      }
+    }
+
+    .valueArea {
+      width: 350px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row;
+      margin-top: 10px;
+
+      input {
+        width: 310px;
+        height: 40px;
+        background-color: var(--l-grey);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        padding-left: 25px;
+        color: white;
+        border-radius: 25px;
+        border: 0;
+        outline: 0;
+      }
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      .text {
+        width: 250px;
+        margin-top: 20px;
+      }
+
+      .button {
+        width: 150px;
+        padding: 10px;
+        margin-top: 30px;
+        border: gray solid 2px;
+        border-radius: 25px;
+        cursor: pointer;
       }
     }
   }
