@@ -35,6 +35,8 @@
     .pointer {
       img {
         cursor: pointer;
+        width: 13px;
+        transition: all 0.3s ease-in-out;
       }
     }
   }

@@ -20,6 +20,35 @@ const Transfer: React.FC<PageType> = (props: PageType) => {
     setNativeAddress(address);
   })
 
+  const [isDoing, setIsDoing] = useState(false);
+
+  const copyAnimation = () => {
+    const icon = document.getElementById("copyIcon") as HTMLImageElement;
+
+    if (icon && !isDoing) {
+      setIsDoing(true);
+      icon.style.transform = "rotate(40deg)";
+
+      setTimeout(() => {
+        icon.style.transform = "rotate(-360deg)";
+      }, 300);
+
+      setTimeout(() => {
+        icon.src = "/images/check.svg";
+        icon.style.transform = "rotate(-380deg)";
+      }, 400);
+
+      setTimeout(() => {
+        icon.style.transform = "rotate(0deg)";
+      }, 1000);
+
+      setTimeout(() => {
+        icon.src = "/images/copy.svg";
+        setIsDoing(false);
+      }, 1200);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -42,9 +71,14 @@ const Transfer: React.FC<PageType> = (props: PageType) => {
         <span className={styles.title}>HOPR Token</span>
         <span className={styles.warning}>Send token to this wallet</span>
         <div className={styles.copyArea}>
-          <div className={styles.address}>{formatWallet(nativeAddress, 10)}</div>
+          <div className={styles.address}>{formatWallet(nativeAddress, 32)}</div>
           <div className={styles.button}>
-            <img onClick={() => {navigator.clipboard.writeText(nativeAddress)}} src="/images/copy.svg" alt="Icon" />
+            <img
+              src="/images/copy.svg"
+              alt="Icon"
+              id="copyIcon"
+              onClick={() => copyAnimation()}
+            />
           </div>
         </div>
       </div>
