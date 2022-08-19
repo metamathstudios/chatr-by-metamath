@@ -55,6 +55,17 @@
           align-items: flex-start;
           flex-direction: column;
           padding-left: 8px;
+
+          input {
+            width: 180px;
+            height: 40px;
+            border: 0;
+            outline: 0;
+            background-color: var(--grey);
+            border-radius: 10px;
+            color: var(--white);
+            padding: 10px;
+          }
         }
       }
 
@@ -67,6 +78,8 @@
 
         img {
           cursor: pointer;
+          width: 22px;
+          transition: 0.3s all ease-in-out;
         }
       }
     }

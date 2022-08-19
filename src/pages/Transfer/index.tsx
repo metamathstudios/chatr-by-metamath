@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./style.module.scss";
 
 interface PageType {
@@ -6,6 +6,35 @@ interface PageType {
 }
 
 const Transfer: React.FC<PageType> = (props: PageType) => {
+  const [isDoing, setIsDoing] = useState(false);
+
+  const copyAnimation = () => {
+    const icon = document.getElementById("copyIcon") as HTMLImageElement;
+
+    if (icon && !isDoing) {
+      setIsDoing(true);
+      icon.style.transform = "rotate(40deg)";
+
+      setTimeout(() => {
+        icon.style.transform = "rotate(-360deg)";
+      }, 300);
+
+      setTimeout(() => {
+        icon.src = "/images/check.svg";
+        icon.style.transform = "rotate(-380deg)";
+      }, 400);
+
+      setTimeout(() => {
+        icon.style.transform = "rotate(0deg)";
+      }, 1000);
+
+      setTimeout(() => {
+        icon.src = "/images/copy.svg";
+        setIsDoing(false);
+      }, 1200);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -30,7 +59,12 @@ const Transfer: React.FC<PageType> = (props: PageType) => {
         <div className={styles.copyArea}>
           <div className={styles.address}>KSAUBDAUDIBASDIUBASDIUBSADIUBSA</div>
           <div className={styles.button}>
-            <img src="/images/copy.svg" alt="Icon" />
+            <img
+              src="/images/copy.svg"
+              alt="Icon"
+              id="copyIcon"
+              onClick={() => copyAnimation()}
+            />
           </div>
         </div>
       </div>
