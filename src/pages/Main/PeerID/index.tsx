@@ -1,9 +1,7 @@
 import React from "react";
 import styles from "./styles.module.scss";
 import useAppState, { Settings } from "./../../../state/index";
-import useUser, { UserState } from "./../../../state/user";
-
-
+import useUser from "./../../../state/user";
 
 const PeerID: React.FC = () => {
 

@@ -1,6 +1,6 @@
 import { DraftFunction } from "use-immer";
 import { UpdateMessageHandlerInterface } from "../state";
-import { UserState } from "../state/user";
+import { UserState, HoprBalances } from "../state/user";
 
 export const signRequest = (endpoint: string, headers: Headers) =>
   async (encodedSignMessageRequest: string) => {
@@ -66,3 +66,26 @@ export const accountAddress = (endpoint: string, headers: Headers) =>
         });
       });
   };
+  export const hoprBalance = (endpoint: string, headers: Headers) => 
+    (setBalance: (draft: DraftFunction<HoprBalances>) => void) => {
+      return fetch(`${endpoint}/api/v2/account/balances`, {
+        headers,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.info("Fetched hoprBalance", data.hopr);
+          setBalance((draft) => {
+            draft.hopr = data.hopr;
+            return draft;          
+        });
+      })
+        .catch((err) => {
+          console.error(err);
+          setBalance((draft) => {
+            draft.hopr = undefined;
+            draft.error = err;
+            return draft;
+        });
+    });
+  };
+

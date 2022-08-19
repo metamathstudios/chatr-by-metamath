@@ -27,6 +27,10 @@ export const isValidPeerId = (v: string): boolean => {
   );
 };
 
+export const isValidEthAddress = (v: string): boolean => {
+  return /^0x[a-fA-F0-9]{40}$/.test(v);
+};
+
 /**
  * Prepends messages with our app's tag so we can distinguish the
  * messages from other apps.
