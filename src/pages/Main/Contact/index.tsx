@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { formatWallet } from "../../../utils";
 import styles from "./styles.module.scss";
+import * as getAddr from "../../../utils/getAddr";
 
 interface PageType {
   changePageHandle: (value: string | ((prevVar: string) => string)) => void;
@@ -11,6 +12,12 @@ interface PageType {
 }
 
 const Contact: React.FC<PageType> = (props: PageType) => {
+
+  const [nativeAddress, setNativeAddress] = useState("");
+  getAddr.getAddressFromPeer(props.wallet).then(address => {
+    setNativeAddress(address);
+  })
+
   return (
     <div className={styles.item}>
       <div className={styles.decorator}>
@@ -22,11 +29,19 @@ const Contact: React.FC<PageType> = (props: PageType) => {
         )}
         <span
           className={styles.wallet}
-          style={props.customName ? { fontSize: "11px" } : { fontSize: "13px" }}
+          style={props.customName ? { fontSize: "10px" } : { fontSize: "13px" }}
         >
           {props.customName
-            ? formatWallet(props.wallet, 20)
-            : formatWallet(props.wallet, 18)}
+            ? `Peer Id: ${formatWallet(props.wallet, 15)}`
+            : `Peer Id: ${formatWallet(props.wallet, 12)}`}
+        </span>
+        <span
+          className={styles.wallet}
+          style={props.customName ? { fontSize: "10px" } : { fontSize: "13px" }}
+        >
+          {props.customName
+            ? `Wallet: ${formatWallet(nativeAddress, 16)}`
+            : `Wallet: ${formatWallet(nativeAddress, 13)}`}
         </span>
       </div>
       <div className={styles.favorite}>

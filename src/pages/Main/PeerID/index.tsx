@@ -23,7 +23,7 @@ const PeerID: React.FC = () => {
 
       setTimeout(() => {
         icon.src = "/images/checkDark.svg";
-        icon.style.transform = "rotate(-380deg)";
+        icon.style.transform = "rotate(-370deg)";
       }, 400);
 
       setTimeout(() => {

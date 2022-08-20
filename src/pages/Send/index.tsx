@@ -6,7 +6,9 @@ import * as getAddr from "./../../utils/getAddr";
 import useUser from "./../../state/user";
 
 interface PageType {
+  chatWith?: string;
   changePageHandle: (value: string | ((prevVar: string) => string)) => void;
+  changeChatWith: (value: string | ((prevVar: string) => string)) => void;
   customName?: string;
 }
 
@@ -17,10 +19,17 @@ const Send: React.FC<PageType> = (props: PageType) => {
   const myPeerId = myUserState?.state.myPeerId || "Can't Fetch PeerID";
   const hoprBalance = Number(myUserState?.balances.hopr)/1e18 || 0;
   const [nativeAddress, setNativeAddress] = useState("");
+  const [destinationAddress, setDestinationAddress] = useState("");
 
   getAddr.getAddressFromPeer(myPeerId).then(address => {
     setNativeAddress(address);
   })
+
+  if(props.chatWith) {
+  getAddr.getAddressFromPeer(props.chatWith).then(address => {
+    setDestinationAddress(address);
+  })
+  }
 
   const send = () => {
     const addressInput = document.getElementById(
@@ -66,6 +75,7 @@ const Send: React.FC<PageType> = (props: PageType) => {
               src="/images/backArrow.svg"
               alt="Icon"
               onClick={() => {
+                props.changeChatWith("");
                 props.changePageHandle("wallet");
               }}
             />
@@ -93,12 +103,15 @@ const Send: React.FC<PageType> = (props: PageType) => {
         <span className={styles.title}>Hopr Token</span>
         <span className={styles.wallet}>Balance avaliable: {hoprBalance}</span>
         <div className={styles.addressArea}>
-          <input type="text" id="addressInput" placeholder="Insert a address" />
+          { (destinationAddress !== '') ? (
+            <input type="text" id="addressInput" placeholder="Insert a address" value={destinationAddress}></input>
+          ): (<input type="text" id="addressInput" placeholder="Insert a address"></input>) }
           <div className={styles.button} id="button">
             <img
               src="/images/send.svg"
               alt="Icon"
               onClick={() => {
+                console.log(`Sending Amount to ${destinationAddress}`);
                 send();
               }}
             />

@@ -35,7 +35,7 @@ const Transfer: React.FC<PageType> = (props: PageType) => {
 
       setTimeout(() => {
         icon.src = "/images/check.svg";
-        icon.style.transform = "rotate(-380deg)";
+        icon.style.transform = "rotate(-370deg)";
       }, 400);
 
       setTimeout(() => {
@@ -71,13 +71,15 @@ const Transfer: React.FC<PageType> = (props: PageType) => {
         <span className={styles.title}>HOPR Token</span>
         <span className={styles.warning}>Send token to this wallet</span>
         <div className={styles.copyArea}>
-          <div className={styles.address}>{formatWallet(nativeAddress, 32)}</div>
+          <div className={styles.address}>{formatWallet(nativeAddress, 28)}</div>
           <div className={styles.button}>
             <img
               src="/images/copy.svg"
               alt="Icon"
               id="copyIcon"
-              onClick={() => copyAnimation()}
+              onClick={() => 
+                {navigator.clipboard.writeText(nativeAddress).then(() => {copyAnimation()})
+                }}
             />
           </div>
         </div>

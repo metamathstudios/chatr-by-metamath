@@ -21,7 +21,7 @@ function App() {
       {page === "gift" && <Gift changePageHandle={setPage} />}
       {page === "wallet" && <Wallet changePageHandle={setPage} />}
       {page === "transfer" && <Transfer changePageHandle={setPage} />}
-      {page === "send" && <Send changePageHandle={setPage} />}
+      {page === "send" && <Send changePageHandle={setPage} changeChatWith={setChatWith} chatWith={chatWith} />}
       {page === "chat" && (
         <Chat
           changePageHandle={setPage}

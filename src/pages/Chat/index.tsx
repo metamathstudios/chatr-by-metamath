@@ -5,6 +5,7 @@ import Sent from "./Sent";
 import styles from "./style.module.scss";
 import Transaction from "./Transaction";
 
+
 interface PageType {
   chatWith: string;
   changePageHandle: (value: string | ((prevVar: string) => string)) => void;
@@ -14,6 +15,7 @@ interface PageType {
 const Chat: React.FC<PageType> = (props: PageType) => {
   const [editing, setEditing] = useState(false);
   const [customName, setCustomName] = useState("");
+
 
   const editAliases = () => {
     const icon = document.getElementById("editIcon") as HTMLImageElement;
@@ -129,7 +131,7 @@ const Chat: React.FC<PageType> = (props: PageType) => {
       </header>
       <div className={styles.content}>
         <div className={styles.wrapper}>
-          <Received text={"you owe me baitola"} />
+          <Received text={"Hello!"} />
           <Sent text={"I will pay you rn"} />
           <Transaction quantity={10} />
           <Received text={"thanks bro"} />
@@ -143,7 +145,7 @@ const Chat: React.FC<PageType> = (props: PageType) => {
                 src="/images/coloredPig.svg"
                 alt="Icon"
                 onClick={() => {
-                  props.changePageHandle("wallet");
+                  props.changePageHandle("send");
                 }}
               />
             </div>

@@ -228,7 +228,7 @@ const Main: React.FC<MainType> = (props: MainType) => {
         {stage === 2 && (
           <Message
             icon="search"
-            text="Don't know how to chat and send your token? search wallet ID to get
+            text="Don't know how to chat and send your tokens? search wallet ID to get
         started"
           />
         )}
