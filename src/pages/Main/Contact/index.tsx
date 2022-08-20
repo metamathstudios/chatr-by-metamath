@@ -29,19 +29,19 @@ const Contact: React.FC<PageType> = (props: PageType) => {
         )}
         <span
           className={styles.wallet}
-          style={props.customName ? { fontSize: "10px" } : { fontSize: "13px" }}
+          style={props.customName ? { fontSize: "10px" } : { fontSize: "10px" }}
         >
           {props.customName
             ? `Peer Id: ${formatWallet(props.wallet, 15)}`
-            : `Peer Id: ${formatWallet(props.wallet, 12)}`}
+            : `Peer Id: ${formatWallet(props.wallet, 15)}`}
         </span>
         <span
           className={styles.wallet}
-          style={props.customName ? { fontSize: "10px" } : { fontSize: "13px" }}
+          style={props.customName ? { fontSize: "10px" } : { fontSize: "10px" }}
         >
           {props.customName
             ? `Wallet: ${formatWallet(nativeAddress, 16)}`
-            : `Wallet: ${formatWallet(nativeAddress, 13)}`}
+            : `Wallet: ${formatWallet(nativeAddress, 16)}`}
         </span>
       </div>
       <div className={styles.favorite}>

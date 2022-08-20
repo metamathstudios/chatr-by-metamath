@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { isValidEthAddress } from "../../utils";
-import styles from "./style.module.scss";
 import useAppState, { Settings } from "./../../state/index";
-import * as getAddr from "./../../utils/getAddr";
 import useUser from "./../../state/user";
+import * as getAddr from "./../../utils/getAddr";
+import styles from "./style.module.scss";
 
 interface PageType {
   chatWith?: string;
@@ -13,34 +13,64 @@ interface PageType {
 }
 
 const Send: React.FC<PageType> = (props: PageType) => {
-
   const settings = useAppState().state.settings as Settings;
   const myUserState = useUser(settings);
   const myPeerId = myUserState?.state.myPeerId || "Can't Fetch PeerID";
-  const hoprBalance = Number(myUserState?.balances.hopr)/1e18 || 0;
+  const hoprBalance = Number(myUserState?.balances.hopr) / 1e18 || 0;
   const [nativeAddress, setNativeAddress] = useState("");
   const [destinationAddress, setDestinationAddress] = useState("");
 
-  getAddr.getAddressFromPeer(myPeerId).then(address => {
+  getAddr.getAddressFromPeer(myPeerId).then((address) => {
     setNativeAddress(address);
-  })
+  });
 
-  if(props.chatWith) {
-  getAddr.getAddressFromPeer(props.chatWith).then(address => {
-    setDestinationAddress(address);
-  })
+  if (props.chatWith) {
+    getAddr.getAddressFromPeer(props.chatWith).then((address) => {
+      setDestinationAddress(address);
+    });
   }
 
   const send = () => {
     const addressInput = document.getElementById(
       "addressInput"
     ) as HTMLInputElement;
+    const valueInput = document.getElementById(
+      "valueInput"
+    ) as HTMLInputElement;
     const button = document.getElementById("button");
 
-    if (!isValidEthAddress(addressInput.value)) {
-      if (addressInput && button) {
-        var lastValue = addressInput.value;
-        addressInput.value = "Invalid address!";
+    var errors = 0;
+
+    if (addressInput && button) {
+      if (
+        parseFloat(valueInput.value) === 0 ||
+        valueInput.value === null ||
+        !valueInput.value
+      ) {
+        var lastValue = valueInput.value;
+        //valueInput.value = "Invalid value!";
+        valueInput.placeholder = "Invalid value!";
+        valueInput.disabled = true;
+        valueInput.style.borderTop = "1.5px solid red";
+        valueInput.style.borderLeft = "1.5px solid red";
+        valueInput.style.borderBottom = "1.5px solid red";
+
+        setTimeout(() => {
+          valueInput.style.borderTop = "1.5px solid transparent";
+          valueInput.style.borderLeft = "1.5px solid transparent";
+          valueInput.style.borderBottom = "1.5px solid transparent";
+          valueInput.value = lastValue;
+          valueInput.placeholder = "Insert a value";
+          valueInput.disabled = false;
+          lastValue = "";
+        }, 1500);
+
+        errors += 1;
+      }
+
+      if (!isValidEthAddress(addressInput.value)) {
+        var lastAddress = addressInput.value;
+        //addressInput.value = "Invalid address!";
         addressInput.placeholder = "Invalid address!";
         addressInput.disabled = true;
         addressInput.style.borderTop = "1.5px solid red";
@@ -57,12 +87,16 @@ const Send: React.FC<PageType> = (props: PageType) => {
           button.style.borderRight = "1.5px solid transparent";
           button.style.borderTop = "1.5px solid transparent";
           button.style.borderBottom = "1.5px solid transparent";
-          addressInput.value = lastValue;
+          addressInput.value = lastAddress;
           addressInput.placeholder = "Insert a address";
           addressInput.disabled = false;
-          lastValue = "";
+          lastAddress = "";
         }, 1500);
+
+        errors += 1;
       }
+
+      return errors;
     }
   };
 
@@ -85,38 +119,60 @@ const Send: React.FC<PageType> = (props: PageType) => {
         </div>
       </header>
       <div className={styles.content}>
-        <div className={styles.icon}>
-          <img src="/images/user2.svg" alt="HOPR" />
-        </div>
-        {props.customName && (
-          <span className={styles.customName}>{props.customName}</span>
-        )}
-        <span
-          className={styles.wallet}
-          style={props.customName ? { marginTop: "0" } : { marginTop: "20px" }}
-        >
-          Sending From:
-          <br></br>
-          {nativeAddress}
-        </span>
-
-        <span className={styles.title}>Hopr Token</span>
-        <span className={styles.wallet}>Balance avaliable: {hoprBalance}</span>
-        <div className={styles.addressArea}>
-          { (destinationAddress !== '') ? (
-            <input type="text" id="addressInput" placeholder="Insert a address" value={destinationAddress}></input>
-          ): (<input type="text" id="addressInput" placeholder="Insert a address"></input>) }
-          <div className={styles.button} id="button">
-            <img
-              src="/images/send.svg"
-              alt="Icon"
-              onClick={() => {
-                console.log(`Sending Amount to ${destinationAddress}`);
-                send();
-              }}
-            />
+        <>
+          <div className={styles.icon}>
+            <img src="/images/user2.svg" alt="HOPR" />
           </div>
-        </div>
+          {props.customName && (
+            <span className={styles.customName}>{props.customName}</span>
+          )}
+          <span
+            className={styles.wallet}
+            style={
+              props.customName ? { marginTop: "0" } : { marginTop: "20px" }
+            }
+          >
+            Sending From:
+            <br></br>
+            {nativeAddress}
+          </span>
+
+          <span className={styles.title}>Hopr Token</span>
+          <span className={styles.wallet}>
+            Balance avaliable: {hoprBalance}
+          </span>
+          <div className={styles.valueArea}>
+            <input type="number" id="valueInput" placeholder="Insert a value" />
+          </div>
+          <div className={styles.addressArea}>
+            {destinationAddress !== "" ? (
+              <input
+                type="text"
+                id="addressInput"
+                placeholder="Insert a address"
+                value={destinationAddress}
+              ></input>
+            ) : (
+              <input
+                type="text"
+                id="addressInput"
+                placeholder="Insert a address"
+              ></input>
+            )}
+            <div className={styles.button} id="button">
+              <img
+                src="/images/send.svg"
+                alt="Icon"
+                onClick={() => {
+                  if (Number(send()) === 0) {
+                    console.log("Sending...");
+                    props.changePageHandle("sendError")
+                  }
+                }}
+              />
+            </div>
+          </div>
+        </>
       </div>
       <div className={styles.footer}>
         <span>By</span>

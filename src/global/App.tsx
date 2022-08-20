@@ -5,6 +5,8 @@ import Chat from "../pages/Chat";
 import Gift from "../pages/Gift";
 import Main from "../pages/Main";
 import Send from "../pages/Send";
+import SendConfirm from "../pages/Send/SendConfirm";
+import SendError from "../pages/Send/SendError";
 import Settings from "../pages/Settings";
 import Transfer from "../pages/Transfer";
 import Wallet from "../pages/Wallet";
@@ -21,7 +23,15 @@ function App() {
       {page === "gift" && <Gift changePageHandle={setPage} />}
       {page === "wallet" && <Wallet changePageHandle={setPage} />}
       {page === "transfer" && <Transfer changePageHandle={setPage} />}
-      {page === "send" && <Send changePageHandle={setPage} changeChatWith={setChatWith} chatWith={chatWith} />}
+      {page === "sendConfirm" && <SendConfirm changePageHandle={setPage} />}
+      {page === "sendError" && <SendError changePageHandle={setPage} />}
+      {page === "send" && (
+        <Send
+          changePageHandle={setPage}
+          changeChatWith={setChatWith}
+          chatWith={chatWith}
+        />
+      )}
       {page === "chat" && (
         <Chat
           changePageHandle={setPage}

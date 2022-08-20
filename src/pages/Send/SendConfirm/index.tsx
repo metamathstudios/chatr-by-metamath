@@ -3,36 +3,38 @@ import styles from "./style.module.scss";
 
 interface PageType {
   changePageHandle: (value: string | ((prevVar: string) => string)) => void;
+  customName?: string;
 }
 
-const Gift: React.FC<PageType> = (props: PageType) => {
+const Send: React.FC<PageType> = (props: PageType) => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.menu}>
-          <div className={styles.left}>
+          <div className={styles.left} id="leftArea">
             <img
               src="/images/backArrow.svg"
               alt="Icon"
               onClick={() => {
-                props.changePageHandle("main");
+                props.changePageHandle("wallet");
               }}
             />
-            <span>Gift Token</span>
+            <span>Send</span>
           </div>
           <div className={styles.right} />
         </div>
       </header>
       <div className={styles.content}>
-        <img src="/images/bigpig.svg" alt="Icon" />
-        <span>
-          With more usage time, more tokens you guarantee, currently you have:
-        </span>
-        <div className={styles.toReceive}>
-          <img src="/images/hopr.svg" alt="HOPR" />
-          <span>00 HOPR</span>
+        <div className={styles.status}>
+          <img src="/images/success.svg" alt="Success" />
+          <div className={styles.text}>Transaction sent successfully</div>
+          <div
+            className={styles.button}
+            onClick={() => props.changePageHandle("main")}
+          >
+            OK
+          </div>
         </div>
-        <div className={styles.button}>Collect Token</div>
       </div>
       <div className={styles.footer}>
         <span>By</span>
@@ -43,4 +45,4 @@ const Gift: React.FC<PageType> = (props: PageType) => {
   );
 };
 
-export default Gift;
+export default Send;
