@@ -10,6 +10,8 @@ interface PageType {
   changePageHandle: (value: string | ((prevVar: string) => string)) => void;
   changeChatWith: (value: string | ((prevVar: string) => string)) => void;
   customName?: string;
+  changeDestination: (value: string | ((prevVar: string) => string)) => void;
+  changeAmountToSend: (value: string | ((prevVar: string) => string)) => void;
 }
 
 const Send: React.FC<PageType> = (props: PageType) => {
@@ -30,7 +32,7 @@ const Send: React.FC<PageType> = (props: PageType) => {
     });
   }
 
-  const send = () => {
+  const checkValidInputs = () => {
     const addressInput = document.getElementById(
       "addressInput"
     ) as HTMLInputElement;
@@ -63,7 +65,7 @@ const Send: React.FC<PageType> = (props: PageType) => {
           valueInput.placeholder = "Insert a value";
           valueInput.disabled = false;
           lastValue = "";
-        }, 1500);
+        }, 1000);
 
         errors += 1;
       }
@@ -91,12 +93,16 @@ const Send: React.FC<PageType> = (props: PageType) => {
           addressInput.placeholder = "Insert a address";
           addressInput.disabled = false;
           lastAddress = "";
-        }, 1500);
+        }, 1000);
 
         errors += 1;
       }
 
-      return errors;
+      if (errors === 0) {
+        return true;
+      } else {
+        return false;
+      }
     }
   };
 
@@ -123,6 +129,7 @@ const Send: React.FC<PageType> = (props: PageType) => {
           <div className={styles.icon}>
             <img src="/images/user2.svg" alt="HOPR" />
           </div>
+
           {props.customName && (
             <span className={styles.customName}>{props.customName}</span>
           )}
@@ -164,9 +171,13 @@ const Send: React.FC<PageType> = (props: PageType) => {
                 src="/images/send.svg"
                 alt="Icon"
                 onClick={() => {
-                  if (Number(send()) === 0) {
-                    console.log("Sending...");
-                    props.changePageHandle("sendError")
+                  if (checkValidInputs()) {
+                    props.changeDestination(destinationAddress);
+                    const valueInput = document.getElementById(
+                      "valueInput"
+                    ) as HTMLInputElement;
+                    props.changeAmountToSend(valueInput.value);
+                    props.changePageHandle("sending");
                   }
                 }}
               />

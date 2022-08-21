@@ -32,7 +32,7 @@ const Send: React.FC<PageType> = (props: PageType) => {
           </div>
           <div
             className={styles.button}
-            onClick={() => props.changePageHandle("main")}
+            onClick={() => props.changePageHandle("wallet")}
           >
             OK
           </div>

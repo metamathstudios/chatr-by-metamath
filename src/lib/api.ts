@@ -1,5 +1,5 @@
 import { DraftFunction } from "use-immer";
-import { UpdateMessageHandlerInterface } from "../state";
+import { UpdateMessageHandlerInterface , Transaction} from "../state";
 import { UserState, HoprBalances } from "../state/user";
 
 export const signRequest = (endpoint: string, headers: Headers) =>
@@ -18,6 +18,28 @@ export const signRequest = (endpoint: string, headers: Headers) =>
       })
       .catch((err) => {
         console.error("ERROR requesting signature message", err);
+        return String(err);
+      });
+  };
+export const sendTransaction = (endpoint: string, headers: Headers) =>
+  async (transaction: Transaction) => {
+    return fetch(`${endpoint}/api/v2/account/withdraw`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        currency: transaction.currency,
+        amount: transaction.amount,
+        recipient: transaction.recipient,}),
+    })
+      .then( async (res) => {
+        if(res.status === 200) return "SUCCESS";
+        if(res.status === 400) return "FAILURE";
+        const err = 'Unknown response status.'
+        console.error("ERROR sending transaction", err);
+        return String(err);
+      })
+      .catch((err) => {
+        console.error("ERROR sending transaction", err);
         return String(err);
       });
   };

@@ -30,7 +30,7 @@ const Send: React.FC<PageType> = (props: PageType) => {
           <div className={styles.text}>Transaction sent successfully</div>
           <div
             className={styles.button}
-            onClick={() => props.changePageHandle("main")}
+            onClick={() => props.changePageHandle("wallet")}
           >
             OK
           </div>

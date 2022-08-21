@@ -3,8 +3,8 @@ import { addAliases, Aliases, formatWallet } from "../../utils";
 import Received from "./Received";
 import Sent from "./Sent";
 import styles from "./style.module.scss";
+import useAppState, { Settings } from "./../../state/index";
 import Transaction from "./Transaction";
-
 
 interface PageType {
   chatWith: string;
@@ -15,7 +15,6 @@ interface PageType {
 const Chat: React.FC<PageType> = (props: PageType) => {
   const [editing, setEditing] = useState(false);
   const [customName, setCustomName] = useState("");
-
 
   const editAliases = () => {
     const icon = document.getElementById("editIcon") as HTMLImageElement;
@@ -131,10 +130,11 @@ const Chat: React.FC<PageType> = (props: PageType) => {
       </header>
       <div className={styles.content}>
         <div className={styles.wrapper}>
-          <Received text={"Hello!"} />
-          <Sent text={"I will pay you rn"} />
-          <Transaction quantity={10} />
-          <Received text={"thanks bro"} />
+          <Received text={`You are talking to ${customName}`} />
+
+
+          {/* <Sent text={"I will pay you rn"} /> */}
+          {/* <Transaction quantity={10} /> */}
         </div>
       </div>
       <div className={styles.footer}>

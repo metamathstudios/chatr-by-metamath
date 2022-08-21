@@ -51,6 +51,12 @@ export type AddSentMessageHandler = (
   verifiedStatus?: VerifiedStatus
 ) => void;
 
+export type Transaction = {
+  currency: string;
+  amount: string;
+  recipient: string;
+};
+
 export type ReceiveMessageHandler = (from: string, content: string, verifiedStatus?: VerifiedStatus) => void
 
 export const dev = 'Dev';
