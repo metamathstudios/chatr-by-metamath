@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import useAppState, { Settings } from "./../../../state/index";
 import useUser from "./../../../state/user";
-// import useWebsocket from "../../../state/websocket";
 import styles from "./styles.module.scss";
 
 const PeerID: React.FC = () => {
   const settings = useAppState().state.settings as Settings;
   const myUserState = useUser(settings);
-  // const websocket = useWebsocket(settings);
   const myPeerId = myUserState?.state.myPeerId || "Can't Fetch PeerID";
+  
 
   const [isDoing, setIsDoing] = useState(false);
 

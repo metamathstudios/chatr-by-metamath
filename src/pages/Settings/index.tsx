@@ -12,16 +12,16 @@ const Settings: React.FC<PageType> = (props: PageType) => {
     const httpEndpointValue = (
       document.getElementById("httpEndpoint") as HTMLFormElement
     ).value;
-    const wsEndpointValue = (
+    /* const wsEndpointValue = (
       document.getElementById("wsEndpoint") as HTMLFormElement
-    ).value;
+    ).value; */
     const securityTokenValue = (
       document.getElementById("securityToken") as HTMLFormElement
     ).value;
 
     const data = {
       HTTPEndpoint: httpEndpointValue,
-      WSEndpoint: wsEndpointValue,
+      /* WSEndpoint: wsEndpointValue, */
       SecurityToken: securityTokenValue,
     };
 
@@ -54,8 +54,8 @@ const Settings: React.FC<PageType> = (props: PageType) => {
 
         (document.getElementById("httpEndpoint") as HTMLFormElement).value =
           parsed.HTTPEndpoint;
-        (document.getElementById("wsEndpoint") as HTMLFormElement).value =
-          parsed.WSEndpoint;
+        /* (document.getElementById("wsEndpoint") as HTMLFormElement).value =
+          parsed.WSEndpoint; */
         (document.getElementById("securityToken") as HTMLFormElement).value =
           parsed.SecurityToken;
       }
@@ -96,10 +96,10 @@ const Settings: React.FC<PageType> = (props: PageType) => {
             <label>HTTP Endpoint:</label>
             <input type="text" id="httpEndpoint" />
           </div>
-          <div className={styles.item}>
+          {/* <div className={styles.item}>
             <label>WS Endpoint:</label>
             <input type="text" id="wsEndpoint" />
-          </div>
+          </div> */}
           <div className={styles.item}>
             <label>Security Token</label>
             <input type="password" id="securityToken" />

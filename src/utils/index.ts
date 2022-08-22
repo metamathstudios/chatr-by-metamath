@@ -184,7 +184,7 @@ export const getUrlParams = (): Partial<Settings> => {
 
     return {
       httpEndpoint: parsed.HTTPEndpoint,
-      wsEndpoint: parsed.WSEndpoint,
+      wsEndpoint: parsed.HTTPEndpoint,
       securityToken: parsed.SecurityToken,
     };
   } else {

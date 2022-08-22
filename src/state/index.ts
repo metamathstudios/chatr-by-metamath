@@ -6,12 +6,18 @@ import { useImmer } from "use-immer";
 import { decodeMessage, encodeMessage, genId, getUrlParams, isSSR, verifySignatureFromPeerId } from "../utils";
 import { MutableRefObject } from "react";
 import { sendMessage, signRequest } from "../lib/api";
+import { utils } from "ethers";
 
 export type { ConnectionStatus } from "./websocket";
 
 export type VerifiedStatus = "UNVERIFIED" | "VERIFIED" | "FAILED_VERIFICATION"
 
-export type UpdateMessageHandlerInterface = (counterparty: string, messageId: string, status: Message["status"], error?: string | undefined) => void
+export type UpdateMessageHandlerInterface = (
+  counterparty: string,
+  messageId: string,
+  status: Message["status"],
+  error?: string | undefined
+) => void;
 
 export type Message = {
   id: string;
@@ -57,7 +63,11 @@ export type Transaction = {
   recipient: string;
 };
 
-export type ReceiveMessageHandler = (from: string, content: string, verifiedStatus?: VerifiedStatus) => void
+export type ReceiveMessageHandler = (
+  from: string,
+  content: string,
+  verifiedStatus?: VerifiedStatus
+) => void;
 
 export const dev = 'Dev';
 export const welcome = 'Welcome';
@@ -68,7 +78,7 @@ const useAppState = () => {
   const [state, setState] = useImmer<State>({
     settings: {
       httpEndpoint: urlParams.httpEndpoint || DEFAULT_SETTINGS.httpEndpoint,
-      wsEndpoint: urlParams.wsEndpoint || DEFAULT_SETTINGS.wsEndpoint,
+      wsEndpoint: urlParams.httpEndpoint || DEFAULT_SETTINGS.wsEndpoint,
       securityToken: urlParams.securityToken,
     },
     verified: false,
@@ -200,30 +210,37 @@ const useAppState = () => {
       .catch((err: any) => console.error('ERROR Failed to send message', err));
   };
 
-  const handleReceivedMessage = (addReceivedMessage: ReceiveMessageHandler) => async (ev: MessageEvent<string>) => {
-    try {
-      // we are only interested in messages, not all the other events coming in on the socket
-      const data = JSON.parse(ev.data);
-      if (data.type == "message") {
-        const { tag, from, message, signature } = decodeMessage(data.msg);
+  const handleReceivedMessage =
+    (addReceivedMessage: ReceiveMessageHandler) =>
+    async (ev: MessageEvent<string>) => {
+      try {
+        // we are only interested in messages, not all the other events coming in on the socket
+        const msg = utils.RLP.decode(
+          new Uint8Array(JSON.parse(`[${ev.data}]`))
+        );
+        const { tag, from, message, signature } = decodeMessage(
+          utils.toUtf8String(msg[0])
+        );
 
-        const verifiedStatus : VerifiedStatus = signature ?
-          // Messages are pre-pended with the padding to avoid generic signatures.
-          (await verifySignatureFromPeerId(from, `HOPR Signed Message: ${message}`, signature) ?
-            "VERIFIED" :
-            "FAILED_VERIFICATION"
-          ) :
-          "UNVERIFIED";
+        const verifiedStatus: VerifiedStatus = signature
+          ? // Messages are pre-pended with the padding to avoid generic signatures.
+            (await verifySignatureFromPeerId(
+              from,
+              `HOPR Signed Message: ${message}`,
+              signature
+            ))
+            ? "VERIFIED"
+            : "FAILED_VERIFICATION"
+          : "UNVERIFIED";
 
         // we are only interested in myne messages
         if (tag == "myne") {
           addReceivedMessage(from, message, verifiedStatus);
         }
+      } catch (err) {
+        console.info("Error decoding message", err);
       }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    };
 
   const loadWelcomeConversation = () => {
     addNewConversation(welcome)

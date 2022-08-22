@@ -4,7 +4,11 @@ import Received from "./Received";
 import Sent from "./Sent";
 import styles from "./style.module.scss";
 import useAppState, { Settings } from "./../../state/index";
-import Transaction from "./Transaction";
+import Transaction from "./Transaction"
+
+import useWebsocket from "../../state/websocket";
+import useUser from "./../../state/user";
+import { decodeMessage } from "./../../utils"
 
 interface PageType {
   chatWith: string;
@@ -15,6 +19,41 @@ interface PageType {
 const Chat: React.FC<PageType> = (props: PageType) => {
   const [editing, setEditing] = useState(false);
   const [customName, setCustomName] = useState("");
+
+  const {
+    state: { settings, conversations },
+    handleReceivedMessage,
+    addReceivedMessage,
+  } = useAppState();
+
+  const websocket = useWebsocket(settings);
+  const { socketRef } = websocket;
+
+  const user = useUser(settings);
+  const { getReqHeaders } = user;
+  const { myPeerId } = user?.state;
+
+  const conversation = props.chatWith ? conversations.get(props.chatWith) : undefined;
+  const messages = conversation ? Array.from(conversation.values()) : [];
+
+  // attach event listener for new messages
+  useEffect(() => {
+    if (!myPeerId || !socketRef.current) return;
+    socketRef.current.addEventListener(
+      "message",
+      handleReceivedMessage(addReceivedMessage)
+    );
+
+    return () => {
+      if (!socketRef.current) return;
+      socketRef.current.removeEventListener(
+        "message",
+        handleReceivedMessage(addReceivedMessage)
+      );
+    };
+  }, [myPeerId, socketRef.current]);
+
+  
 
   const editAliases = () => {
     const icon = document.getElementById("editIcon") as HTMLImageElement;
@@ -130,9 +169,8 @@ const Chat: React.FC<PageType> = (props: PageType) => {
       </header>
       <div className={styles.content}>
         <div className={styles.wrapper}>
+
           <Received text={`You are talking to ${customName}`} />
-
-
           {/* <Sent text={"I will pay you rn"} /> */}
           {/* <Transaction quantity={10} /> */}
         </div>

@@ -2,11 +2,14 @@
   A react hook.
   Keeps websocket connection alive, reconnects on disconnections or endpoint change.
 */
-import type { Settings } from "./index";
+import type { Settings } from ".";
 import { useEffect, useRef, useState } from "react";
 import { useImmer } from "use-immer";
 import { debounce } from "lodash";
-import { isSSR } from "./../utils";
+import { isSSR } from "../utils";
+import { enableMapSet } from 'immer';
+
+enableMapSet()
 
 export type ConnectionStatus = "CONNECTED" | "DISCONNECTED";
 
@@ -61,7 +64,8 @@ const useWebsocket = (settings: Settings) => {
     }
 
     // need to set the token in the query parameters, to enable websocket authentication
-    const wsUrl = new URL(settings.wsEndpoint);
+    const wsUrl = new URL("/api/v2/messages/websocket", settings.httpEndpoint);
+    wsUrl.protocol = wsUrl.protocol === "https:" ? "wss" : "ws";
     if (settings.securityToken) {
       wsUrl.search = `?apiToken=${settings.securityToken}`;
     }
@@ -83,7 +87,7 @@ const useWebsocket = (settings: Settings) => {
       socketRef.current.removeEventListener("close", handleCloseEvent);
       socketRef.current.removeEventListener("error", handleErrorEvent);
     };
-  }, [settings.wsEndpoint, settings.securityToken, reconnectTmsp]);
+  }, [settings.httpEndpoint, settings.securityToken, reconnectTmsp]);
 
   return {
     state,
