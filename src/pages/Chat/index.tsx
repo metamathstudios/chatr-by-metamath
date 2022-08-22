@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { addAliases, Aliases, formatWallet } from "../../utils";
+import React, { useEffect, useState, KeyboardEvent } from "react";
+import { addAliases, Aliases, formatWallet, genId, encodeMessage } from "../../utils";
 import Received from "./Received";
 import Sent from "./Sent";
 import styles from "./style.module.scss";
@@ -8,7 +8,7 @@ import Transaction from "./Transaction"
 
 import useWebsocket from "../../state/websocket";
 import useUser from "./../../state/user";
-import { decodeMessage } from "./../../utils"
+import { sendMessage, signRequest } from "../../lib/api";
 
 interface PageType {
   chatWith: string;
@@ -19,22 +19,22 @@ interface PageType {
 const Chat: React.FC<PageType> = (props: PageType) => {
   const [editing, setEditing] = useState(false);
   const [customName, setCustomName] = useState("");
+  const [content, setMessage] = useState<string>("");
 
   const {
     state: { settings, conversations },
     handleReceivedMessage,
     addReceivedMessage,
+    addSentMessage,
+    updateMessage
   } = useAppState();
 
   const websocket = useWebsocket(settings);
   const { socketRef } = websocket;
 
   const user = useUser(settings);
-  const { getReqHeaders } = user;
+  // const { getReqHeaders } = user;
   const { myPeerId } = user?.state;
-
-  const conversation = props.chatWith ? conversations.get(props.chatWith) : undefined;
-  const messages = conversation ? Array.from(conversation.values()) : [];
 
   // attach event listener for new messages
   useEffect(() => {
@@ -53,7 +53,6 @@ const Chat: React.FC<PageType> = (props: PageType) => {
     };
   }, [myPeerId, socketRef.current]);
 
-  
 
   const editAliases = () => {
     const icon = document.getElementById("editIcon") as HTMLImageElement;
@@ -114,6 +113,66 @@ const Chat: React.FC<PageType> = (props: PageType) => {
     }
   }, [props.chatWith]);
 
+  const handleSendMessage = async () => {
+    if (!myPeerId || !socketRef.current) return;
+
+    const headers = new Headers();
+    headers.set("Content-Type", "application/json");
+    headers.set("Accept-Content", "application/json");
+  
+    if (settings.securityToken) {
+      headers.set("Authorization", "Basic " + btoa(settings.securityToken));
+    }
+
+    const signature = await signRequest(settings.httpEndpoint, headers)(content)
+    .catch((err: any) => console.error('ERROR Failed to obtain signature', err));
+    const encodedMessage = encodeMessage(myPeerId, content, signature);
+    const id = genId();
+    addSentMessage(myPeerId, props.chatWith, content, id);
+    await sendMessage(settings.httpEndpoint, headers)(props.chatWith, encodedMessage, props.chatWith, id, updateMessage)
+    .catch((err: any) => console.error('ERROR Failed to send message', err));
+  };
+
+  const handleEnterPress = (e: KeyboardEvent) => {
+    if (e.key === "Enter" && e.shiftKey == false) {
+      e.preventDefault();
+      
+      const messageInput = document.getElementById(
+        "messageInput"
+      ) as HTMLInputElement;
+
+      handleSendMessage();
+
+      messageInput.value = ""
+    }
+  };
+
+  const handleClick = () => {
+    const messageInput = document.getElementById(
+      "messageInput"
+    ) as HTMLInputElement;
+
+    handleSendMessage();
+    
+    messageInput.value = ""
+  };
+
+
+  // @dev this is the useEffect responsible for
+  // updating new incoming messages as conversations 
+  // is updated
+  useEffect(() => {
+    if(conversations !== undefined){
+    const conversation = conversations.get(props.chatWith);
+    const conversationSize = conversations.get(props.chatWith)?.size;
+    if(conversation !== undefined){
+      const lastMessage = Array.from(conversation)[conversationSize-1];
+      console.log(lastMessage[1].content)
+      console.log(lastMessage[1].isIncoming) // true is is receiving, false if is sending
+    }}
+  }, [conversations])
+  // console.log(conversations)
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -170,7 +229,7 @@ const Chat: React.FC<PageType> = (props: PageType) => {
       <div className={styles.content}>
         <div className={styles.wrapper}>
 
-          <Received text={`You are talking to ${customName}`} />
+          {/* <Received text={`You are talking to ${customName}`} /> */}
           {/* <Sent text={"I will pay you rn"} /> */}
           {/* <Transaction quantity={10} /> */}
         </div>
@@ -189,11 +248,11 @@ const Chat: React.FC<PageType> = (props: PageType) => {
             </div>
           </div>
           <div className={styles.middle}>
-            <input type="text" />
+            <input type="text" id="messageInput" onChange={(e) => setMessage(e.target.value)} onKeyDown={handleEnterPress}/>
           </div>
           <div className={styles.right}>
             <div className={styles.wrapper}>
-              <img src="/images/send.svg" alt="Icon" />
+              <img src="/images/send.svg" alt="Icon" onClick={handleClick} />
             </div>
           </div>
         </div>

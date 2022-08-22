@@ -182,21 +182,6 @@ const useAppState = () => {
     });
   };
 
-  const addNewConversation = (peerId: string) => {
-    setState((draft) => {
-      if (!draft.conversations.has(peerId)) {
-        draft.conversations.set(peerId, new Map<string, Message>());
-      }
-      draft.selection = peerId;
-      return draft;
-    });
-  };
-
-  const handleAddNewConversation = (callback: () => void) => (counterparty: string) => {
-    addNewConversation(counterparty);
-    callback();
-  };
-
   const handleSendMessage = (addSentMessage: AddSentMessageHandler) => (myPeerId: string | undefined, socketRef: MutableRefObject<WebSocket | undefined>, headers: Headers) => async (destination: string, message: string) => {
     const { selection, settings, verified } = state;
     if (bots.includes(destination)) return addSentMessage('', destination, message, genId());
@@ -242,21 +227,6 @@ const useAppState = () => {
       }
     };
 
-  const loadWelcomeConversation = () => {
-    addNewConversation(welcome)
-    // setTimeout ensures the event loop takes these state updates in order.
-    setTimeout(() => addReceivedMessage(welcome, 'Welcome to chatr!'), 0)
-  }
-
-  const loadDevHelperConversation = () => {
-    addNewConversation(dev)
-    // setTimeout ensures the event loop takes these state updates in order.
-    setTimeout(() => addReceivedMessage(dev, 'Welcome to the developer mode.'), 0)
-    setTimeout(() => addReceivedMessage(dev, 'This conversation is only available during development.'), 0)
-    setTimeout(() => addReceivedMessage(dev, 'This is how a verified message looks like.', 'VERIFIED'), 0)
-    setTimeout(() => addReceivedMessage(dev, 'This is how an unverified message looks like.', 'UNVERIFIED'), 0)
-    setTimeout(() => addReceivedMessage(dev, 'This is how a failed verification message looks like.', 'FAILED_VERIFICATION'), 0)
-  }
 
   return {
     state: {
@@ -267,11 +237,9 @@ const useAppState = () => {
     updateSettings,
     setSelection,
     setVerified,
-    handleAddNewConversation,
     handleSendMessage,
     handleReceivedMessage,
-    loadDevHelperConversation,
-    loadWelcomeConversation,
+    updateMessage
   };
 };
 
