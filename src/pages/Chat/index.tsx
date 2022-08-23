@@ -26,6 +26,7 @@ const Chat: React.FC<PageType> = (props: PageType) => {
   const [customName, setCustomName] = useState("");
   const [content, setMessage] = useState<string>("");
   const [chatMessages, setChatMessages] = useState([]);
+  const [conversationIndex, setConversationIndex] = useState(0);
 
   const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
 
@@ -178,13 +179,19 @@ const Chat: React.FC<PageType> = (props: PageType) => {
   // is updated
   useEffect(() => {
     if (conversations !== undefined) {
+      const conversationSize = conversations.get(props.chatWith)?.size;
+      if(conversationSize !== conversationIndex){
+        setConversationIndex(conversationSize);
+      }
+    }
+  }, [conversations]);
+
+  useEffect(() => {
+    if (conversations !== undefined) {
       const conversation = conversations.get(props.chatWith);
       const conversationSize = conversations.get(props.chatWith)?.size;
       if (conversation !== undefined) {
         const lastMessage = Array.from(conversation)[conversationSize - 1];
-        /*   console.log(lastMessage[1].content);
-        console.log(lastMessage[1].isIncoming); // true is is receiving, false if is sending
-        console.log(lastMessage[1].id); */
 
         chatMessages.push({
           id: lastMessage[1].id,
@@ -195,7 +202,7 @@ const Chat: React.FC<PageType> = (props: PageType) => {
         forceUpdate();
       }
     }
-  }, [conversations]);
+  }, [conversationIndex]);
 
   const renderMessages = () => {
     return chatMessages.map((value, index) => {
