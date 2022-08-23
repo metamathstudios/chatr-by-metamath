@@ -1,6 +1,39 @@
-# Getting Started with Create React App
+<!-- INTRODUCTION -->
+<p align="center">
+  <a href="https://github.com/metamathstudios" target="_blank" rel="noopener noreferrer">
+    <img width="100" src="https://user-images.githubusercontent.com/78161484/186249688-f56c5b5e-e068-43ca-bc6c-0efe4bf064ca.png" alt="Chatr Logo">
+  </a>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+  
+  <!-- Title Placeholder -->
+  <h3 align="center">Chatr!</h3>
+  <p align="center">
+    <code>A project by MetaMath Studios</code>
+  </p>
+  <p align="center">
+Chatr! is a fully private chat built on top of <a href="https://hoprnet.org">HOPR's</a> mixnet. Chatr provide a secure and private way to chat and send tokens bundled in a simple to use web extension.
+  </p>
+</p>
+
+## Getting Started with Local Development
+
+Chatr requires the following dependencies
+
+- `node.js@v16`
+- `yarn`
+
+Clone or fork `chatr-by-metamath`:
+
+```sh
+git clone https://github.com/metamathstudios/chatr-by-metamath.git
+```
+
+Install dependencies:
+
+```sh
+cd chatr-by-metamath
+yarn install
+```
 
 ## Available Scripts
 
@@ -13,11 +46,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `yarn build`
 
