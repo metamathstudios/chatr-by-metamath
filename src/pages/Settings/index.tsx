@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import styles from "./style.module.scss";
-
 // import AES from "crypto-js/aes";
 
 interface PageType {
@@ -8,6 +7,7 @@ interface PageType {
 }
 
 const Settings: React.FC<PageType> = (props: PageType) => {
+
   const saveSettings = () => {
     const httpEndpointValue = (
       document.getElementById("httpEndpoint") as HTMLFormElement
@@ -43,6 +43,7 @@ const Settings: React.FC<PageType> = (props: PageType) => {
     if (localStorage) {
       localStorage.setItem("data", JSON.stringify(data));
     }
+  window.location.reload();
   };
 
   useEffect(() => {

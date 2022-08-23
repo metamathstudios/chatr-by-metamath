@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import useRouter from "react-router-dom";
 import { isValidPeerId } from "../../utils";
 import ContactList from "./ContactList";
 import Message from "./Message";
 import styles from "./style.module.scss";
-import useAppState from "../../state";
-import useWebsocket from "../../state/websocket";
-import useUser from "./../../state/user";
 
 interface MainType {
   changeChatWith: (value: string | ((prevVar: string) => string)) => void;
@@ -137,10 +133,11 @@ const Main: React.FC<MainType> = (props: MainType) => {
           localStorage.setItem("contacts", contacts.toString());
           setData(contacts);
           setStage(3);
-          window.location.reload();
+          // window.location.reload();
         }
       }
     }
+    window.location.reload();
   };
 
   return (

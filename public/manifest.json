@@ -1,9 +1,9 @@
 {
-  "version": "1.0",
+  "version": "0.0.1",
   "manifest_version": 3,
-  "short_name": "ChatR!",
-  "name": "ChatR",
-  "description": "Developed by: Metamath Studios",
+  "short_name": "Chatr!",
+  "name": "Chatr",
+  "description": "Chatr leverages HOPR's mixnet to provide a secure and private way to chat and send tokens straight from your browser.",
   "icons": {
     "16": "/logo192.png",
     "48": "/logo192.png",

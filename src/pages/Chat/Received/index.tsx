@@ -3,11 +3,12 @@ import styles from "./styles.module.scss";
 
 interface ComponentType {
   text: string;
+  id: string;
 }
 
 const Received: React.FC<ComponentType> = (props: ComponentType) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} key={props.id}>
       <div className={styles.icon}>
         <img src="/images/user2.svg" alt="Icon" />
       </div>

@@ -11,6 +11,7 @@ import Sending from "../pages/Send/Sending";
 import Settings from "../pages/Settings";
 import Transfer from "../pages/Transfer";
 import Wallet from "../pages/Wallet";
+import WebsocketProvider from "../context/WebsocketProvider";
 
 function App() {
   const [page, setPage] = useState("main");
@@ -18,6 +19,7 @@ function App() {
   const [amountToSend, setAmountToSend] = useState("");
   const [destinationAddress, setDestinationAddress] = useState("");
   return (
+    <WebsocketProvider>
     <div className={styles.app}>
       {page === "main" && (
         <Main changePageHandle={setPage} changeChatWith={setChatWith} />
@@ -54,6 +56,7 @@ function App() {
         />
       )}
     </div>
+    </WebsocketProvider>
   );
 }
 

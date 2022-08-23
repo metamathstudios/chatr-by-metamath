@@ -1,6 +1,7 @@
 {
   "name": "chatr",
   "version": "0.1.0",
+  "description": "This dApp was tested on Node.JS v16.16.0",
   "private": true,
   "dependencies": {
     "@ethersproject/bytes": "^5.6.1",
