@@ -6,7 +6,6 @@ import {
 } from "../../utils";
 import Received from "./Received";
 import Sent from "./Sent";
-import Transaction from "./Transaction";
 import styles from "./style.module.scss";
 import { WebsocketContext } from "../../context/WebsocketProvider";
 
@@ -20,8 +19,11 @@ const Chat: React.FC<PageType> = (props: PageType) => {
   const [editing, setEditing] = useState(false);
   const [customName, setCustomName] = useState("");
   const [content, setMessage] = useState<string>("");
+  const [conversationIndex, setConversationIndex] = useState(0);
 
-  const { handleSendMessage, conversations } = useContext(WebsocketContext);
+  const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
+
+  const { handleSendMessage, conversations, chatMessages, fetchChatMessages } = useContext(WebsocketContext);
 
   const editAliases = () => {
     const icon = document.getElementById("editIcon") as HTMLImageElement;
@@ -111,16 +113,39 @@ const Chat: React.FC<PageType> = (props: PageType) => {
   // is updated
   useEffect(() => {
     if (conversations !== undefined) {
+      const conversationSize = conversations.get(props.chatWith)?.size;
+      if(conversationSize !== conversationIndex){
+        setConversationIndex(conversationSize);
+      }
+    }
+  }, [conversations]);
+
+  useEffect(() => {
+    if (conversations !== undefined) {
       const conversation = conversations.get(props.chatWith);
       const conversationSize = conversations.get(props.chatWith)?.size;
       if (conversation !== undefined) {
         const lastMessage = Array.from(conversation)[conversationSize - 1];
-        console.log(lastMessage[1].content);
-        console.log(lastMessage[1].isIncoming); // true is is receiving, false if is sending
+
+        fetchChatMessages(lastMessage);
+        forceUpdate();
       }
     }
-  }, [conversations]);
-  // console.log(conversations)
+  }, [conversationIndex]);
+
+  const renderMessages = () => {
+    return chatMessages.map((value, index) => {
+      return (
+        <>
+          {value.isIncoming ? (
+            <Received text={`${value.content}`} id={`${value.id}`} />
+          ) : (
+            <Sent text={`${value.content}`} id={`${value.id}`} />
+          )}
+        </>
+      );
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -177,6 +202,7 @@ const Chat: React.FC<PageType> = (props: PageType) => {
       </header>
       <div className={styles.content}>
         <div className={styles.wrapper}>
+          {renderMessages()}
           {/* <Received text={`You are talking to ${customName}`} /> */}
           {/* <Sent text={"I will pay you rn"} /> */}
           {/* <Transaction quantity={10} /> */}

@@ -1,4 +1,4 @@
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import useWebsocket from "../../state/websocket";
 import useAppState, { Message } from "./../../state/index";
 import useUser from "./../../state/user";
@@ -9,7 +9,9 @@ interface WebsocketContext {
     conversations: Map<string, Map<string, Message>>;
     myPeerId: string;
     socketRef: React.MutableRefObject<WebSocket>;
+    chatMessages: any[];
     handleSendMessage(content: string, destination: string): any;
+    fetchChatMessages(lastMessage: [string, Message]): any;
 }
 
 export const WebsocketContext = createContext({} as WebsocketContext);
@@ -23,6 +25,8 @@ const WebsocketProvider = ({ children }) => {
         updateMessage,
         addSentMessage        
       } = useAppState();
+
+      const [chatMessages, setChatMessages] = useState([]);
 
     const websocket = useWebsocket(settings);
     const { socketRef } = websocket;
@@ -67,8 +71,19 @@ const WebsocketProvider = ({ children }) => {
         .catch((err: any) => console.error('ERROR Failed to send message', err));
       };
 
+      const fetchChatMessages = (lastMessage: [string, Message]) => {
+        if( chatMessages[chatMessages.length-1]?.id === lastMessage[1].id){
+          return;
+        }
+        chatMessages.push({
+          id: lastMessage[1].id,
+          isIncoming: lastMessage[1].isIncoming,
+          content: lastMessage[1].content,
+        });
+      }
+
     return (
-        <WebsocketContext.Provider value={{ conversations , myPeerId, socketRef, handleSendMessage}}>
+        <WebsocketContext.Provider value={{ conversations , myPeerId, socketRef, handleSendMessage, chatMessages, fetchChatMessages}}>
             {children}
         </WebsocketContext.Provider>
     );
