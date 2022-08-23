@@ -17,6 +17,7 @@ Chatr! is a fully private chat built on top of <a href="https://hoprnet.org">HOP
 
 ## Future Features
 
+  - [ ] Release on Chrome Web Extension Store (and other browsers).
   - [ ] Make message history persistent (Cookies).
   - [ ] Extend token transfer to DAI tokens.
   - [ ] Create a Login window, abstracting HOPR node configuration and launching on demand nodes to non-tech-savvy users.
