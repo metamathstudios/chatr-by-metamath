@@ -15,6 +15,13 @@ Chatr! is a fully private chat built on top of <a href="https://hoprnet.org">HOP
   </p>
 </p>
 
+
+## 🚀 Getting Started with Chatr! Loading Latest Unpacked Extension Release
+
+https://user-images.githubusercontent.com/78161484/186307184-0d5a4334-4c02-4dd1-b180-35cd55771447.mp4
+
+
+
 ## Future Features
 
   - [ ] Release on Chrome Web Extension Store (and other browsers).
