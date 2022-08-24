@@ -94,7 +94,7 @@ const Settings: React.FC<PageType> = (props: PageType) => {
         </div> */}
         <div className={styles.inputs}>
           <div className={styles.item}>
-            <label>HTTP Endpoint:</label>
+            <label>API URL :</label>
             <input type="text" id="httpEndpoint" />
           </div>
           {/* <div className={styles.item}>
@@ -102,7 +102,7 @@ const Settings: React.FC<PageType> = (props: PageType) => {
             <input type="text" id="wsEndpoint" />
           </div> */}
           <div className={styles.item}>
-            <label>Security Token</label>
+            <label>API KEY : </label>
             <input type="password" id="securityToken" />
           </div>
           <div className={styles.item}>
