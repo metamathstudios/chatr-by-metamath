@@ -15,6 +15,13 @@ Chatr! is a fully private chat built on top of <a href="https://hoprnet.org">HOP
   </p>
 </p>
 
+<div align="center">
+
+[![GitHub tag](https://img.shields.io/github/tag/metamathstudios/chatr-by-metamath?include_prereleases=&sort=semver)](https://github.com/metamathstudios/chatr-by-metamath/releases/)
+[![License](https://img.shields.io/github/license/metamathstudios/chatr-by-metamath)](#license)
+
+</div>
+
 
 ## 🚀 Getting Started with Chatr! Loading Latest Unpacked Extension Release
 
