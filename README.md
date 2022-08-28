@@ -25,11 +25,6 @@ Chatr! is a fully private chat built on top of <a href="https://hoprnet.org">HOP
   
 </div>
 
-
-## 🚀 Getting Started with Chatr! Loading Latest Unpacked Extension Release
-
-https://user-images.githubusercontent.com/78161484/186307184-0d5a4334-4c02-4dd1-b180-35cd55771447.mp4
-
 ## ⚒️ Configuring and using Chatr!
 
 https://user-images.githubusercontent.com/78161484/186452447-5201e3af-460c-4a2a-9e21-e97f927f2046.mp4
@@ -38,10 +33,14 @@ https://user-images.githubusercontent.com/78161484/186452447-5201e3af-460c-4a2a-
 
 https://user-images.githubusercontent.com/78161484/186452686-a97b14da-83a8-4ab2-ba18-42c1c47bd985.mp4
 
+## 📦 Loading Latest Unpacked Extension Release
+
+https://user-images.githubusercontent.com/78161484/186307184-0d5a4334-4c02-4dd1-b180-35cd55771447.mp4
+
 ## Future Features
 
-  - [ ] Release on Chrome Web Extension Store (and other browsers).
-  - [ ] Make message history persistent (Cookies).
+  - [X] Release on Chrome Web Extension Store (and other browsers).
+  - [ ] Make message history persistent.
   - [ ] Extend token transfer to DAI tokens.
   - [ ] Create a Login window, abstracting HOPR node configuration and launching on demand nodes to non-tech-savvy users.
   - [ ] Currenty, aliases are stored locally. HOPR api support setting, reading and deleting peer alias and will be implemented soon.
