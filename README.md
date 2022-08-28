@@ -19,7 +19,10 @@ Chatr! is a fully private chat built on top of <a href="https://hoprnet.org">HOP
 
 [![GitHub tag](https://img.shields.io/github/tag/metamathstudios/chatr-by-metamath?include_prereleases=&sort=semver)](https://github.com/metamathstudios/chatr-by-metamath/releases/)
 [![License](https://img.shields.io/github/license/metamathstudios/chatr-by-metamath)](#license)
-
+<a href="https://chrome.google.com/webstore/detail/chatr/bfcdlkhdghemaahmdlhbknfojecalcgc" target="_blank">
+<img src="https://img.shields.io/badge/Chrome-download-blue?logo=googlechrome" alt="Google Web Store">
+</a>
+  
 </div>
 
 
